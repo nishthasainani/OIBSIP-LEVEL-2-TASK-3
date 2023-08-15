@@ -1,0 +1,74 @@
+const list = document.getElementById("list")
+const listfinalt = document.getElementById("listfinal")
+function todo() {
+    listfinal.innerHTML = "";
+    for (var i = 0, len = localStorage.length; i < len; i++) {
+        var key = localStorage.key(i);
+        var value = localStorage[key];
+        listfinal.innerHTML += `
+            <div class="taskall">
+                <div class="task">
+                    <div class="taskName">
+                    <b>${key} :</b>
+                    </div>                
+                    <span class="taskDiscription">
+                        ${value}
+                    </span>
+                </div>
+            </div>
+        `
+    }
+}
+function listall() {
+    const showhide = document.getElementById("showhide");
+    if (listfinal.style.display === "none") {
+        listfinal.style.display = "block";
+        showhide.textContent = "Hide all Notes";
+        document.querySelector('#tasks').innerHTML = `<h2>Total Notes Saved: ${localStorage.length}</h2>`;
+        todo()
+    } else {
+        listfinal.style.display = "none";
+        showhide.textContent = "Show all Notes";
+    }
+}
+
+function deleteall() {
+    if (localStorage.length == 0) {
+        alert("No Notes were found to Delete.")
+    }
+    else {
+        let sure = confirm("Are you sure you want to Delete your all Notes?")
+        if (sure) {
+            localStorage.clear();
+            listfinal.innerHTML = "";
+            document.querySelector('#tasks').innerHTML = `<h2>Total Notes Saved: ${localStorage.length}</h2>`;
+            listfinal.style.display = "none";
+            showhide.textContent = "Show all Notes";
+        }
+    }
+}
+
+document.querySelector('#push').onclick = function () {
+    if (listName.value.length == 0 && listDiscription.value.length == 0) {
+        alert("Please Enter a Task")
+    }
+
+    else if (listName.value.length == 0 || listDiscription.value.length == 0) {
+        alert("Please Fill Both Blanks")
+    }
+
+    else {
+        try {
+            localStorage.setItem(document.getElementById("listName").value, document.getElementById("listDiscription").value);
+            listName.value = "";
+            listDiscription.value = "";
+            document.querySelector('#tasks').innerHTML = `<h2>Total Notes Saved: ${localStorage.length}</h2>`;
+        } catch (error) {
+            // alert("Sorry")
+            document.getElementsByClassName("container")[0].innerHTML = "<center><h2>It seems like you are using incognito mode</h2></center><center><h2>If Not Check Settings OR Switch to Different Browser</h2></center>"
+        }
+        if (listfinal.style.display == "block") {
+            todo()
+        }
+    }
+}
